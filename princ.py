@@ -3,6 +3,8 @@ from pattern.web import Wikipedia
 from pattern.en import parse,pprint
 from nltk.corpus import wordnet as wn
 
+"""Cambio"""
+
 """
 definicion_en_wiki(conc): encuentra la definicion correspondiente al termino conc.
 """
