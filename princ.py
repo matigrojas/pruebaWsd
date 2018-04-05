@@ -3,7 +3,7 @@ from pattern.web import Wikipedia
 from pattern.en import parse,pprint
 from nltk.corpus import wordnet as wn
 
-#mati es un toga
+#mati es un toga sda
 
 """
 definicion_en_wiki(conc): encuentra la definicion correspondiente al termino conc.
