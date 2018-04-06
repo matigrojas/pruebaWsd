@@ -26,10 +26,12 @@ def encontrar_sustantivos_compuestos(rp):
                 unidos.append(rp[i][0])
                 unidos.append(rp[i+1][0])
             else:
-                if (i+1!=len(rp)-2):
-                    cadena.append(rp[i][0])
+                if (i+1!=len(rp)-1):
+                    if(rp[i][0] not in unidos):
+                        cadena.append(rp[i][0])
                 else:    
-                    cadena.append(rp[i][0])
+                    if(rp[i][0] not in unidos):
+                        cadena.append(rp[i][0])
                     cadena.append(rp[i+1][0])
         else:
             if(rp[i][0] not in unidos):
@@ -55,7 +57,7 @@ def busca_wiki(sent):
         for x in wiki_result.sections:
             if x.title == wiki_result.title:
                 seccion_principal.append(x.string)
-                print x.links
+                #print x.links
     return seccion_principal
 
 """TODO: Metodo modificado de LESK (pudiendo ser el simple, el original o el ampliado/extendido (se modifica de PYWSD))
@@ -67,7 +69,7 @@ las palabras conformantes"""
 """TODO: Metodo de obtencion de definiciones (glosses) por cada synset (Ya desarrollado en otro codigo controladora.py)"""
 
 if __name__ == '__main__':
-    sent2 = 'tea added value manufacture'
+    sent2 = 'tea added value investing'
     result_parse = parse(sent2).split()
     sust_comp = encontrar_sustantivos_compuestos(result_parse[0])
     for x in sust_comp:
