@@ -3,27 +3,28 @@
 # and open the template in the editor.
 import os
 import sys; sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
-from pattern.web import Bing, asynchronous, plaintext, URL  , SEARCH , time
+import requests
+from IPython.display import HTML
+
 
 
 def generar_consulta_bing(q):    
     reload(sys)
     sys.setdefaultencoding('utf8')
 
-    engine_bing = Bing(license=None, language="en")
     bing = []
+    
+    subscription_key = 'b705cc14560b4e52b59cf1f565287894'
+    search_url = "https://api.cognitive.microsoft.com/bing/v7.0/search"
+
+    headers = {"Ocp-Apim-Subscription-Key" : subscription_key}
+
     for consulta in q:
-        request = asynchronous(engine_bing.search, consulta, start=1, count=10, type=SEARCH, timeout=10)
+        params  = {"q": consulta, "textDecorations":True, "textFormat":"HTML"}
+        response = requests.get(search_url, headers=headers, params=params)
+        response.raise_for_status()
+        search_results = response.json()
 
-        while not request.done:
-            time.sleep(0.01)
-
-        # An error occured in engine.search(), raise it.
-        if request.error:
-            raise request.error
-
-        # Retrieve the list of search results.
-        for result in request.value:
-            bing.append(result.url)
-
+        print search_results
+        
     return bing

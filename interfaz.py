@@ -1,5 +1,5 @@
 #-*- coding: utf-8 -*-
-from get_url.controladora import dame_urls
+from get_url.controladora import *
 
 class proyecto:
     def __init__(self,id_proy, titulo_proy, consultas, directorio):
