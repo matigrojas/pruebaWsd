@@ -4,7 +4,7 @@
 import os
 import sys; sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
 import requests
-from IPython.display import HTML
+import json
 
 
 
@@ -24,7 +24,9 @@ def generar_consulta_bing(q):
         response = requests.get(search_url, headers=headers, params=params)
         response.raise_for_status()
         search_results = response.json()
+        data_response = json.dumps(search_results)
+        data_decoded = json.loads(data_response)
+        for x in range(0,10):
+            bing.append(data_decoded["webPages"]["value"][x]["url"])
 
-        print search_results
-        
     return bing
