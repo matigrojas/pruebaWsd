@@ -33,9 +33,7 @@ def generar_consulta_intelligo(consultas):
         driver.find_element_by_id('tbQuery').send_keys(consulta)
         driver.find_element_by_id('btnQuery').click()
         try:
-            element = WebDriverWait(driver, 30).until(
-                                                      EC.presence_of_element_located((By.ID, "svg_graph"))
-                                                      )
+            element = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.ID, "svg_graph")))
         finally:
             html = driver.find_element_by_id('docs')
             contenido = html.get_attribute('innerHTML')
@@ -54,14 +52,17 @@ def get_url(soup):
     urls = []
     contador = 0
     for a in soup.findAll('a'):
-                html = download(a['href'], unicode=True)
-                soupEspaceNet = BeautifulSoup(html)
-                urlDescription = soupEspaceNet.findAll('a', {"class": "publicationLinkClass"})
-                for url in urlDescription:
-                    urlEspace = "http://worldwide.espacenet.com/" + str(url['href'])
-                    urlEspace = urlEspace.replace("biblio","description")
-                    urls.append(urlEspace)
-                    contador = contador + 1
-                    if (contador > 9 ) :
-                        return urls
+        print a['href']
+        #html = download(a['href'], unicode=True)
+        #soupEspaceNet = BeautifulSoup(html)
+        #print soupEspaceNet
+        #urlDescription = soupEspaceNet.findAll('div',{'id':'pagebody'})
+        #for url in urlDescription:
+        #    urlEspace = "http://worldwide.espacenet.com/" + str(url['href'])
+        #    urlEspace = urlEspace.replace("biblio","description")
+        #    urls.append(urlEspace)
+        #    contador = contador + 1
+        #    contador = contador + 1
+        #    if (contador > 9 ) :
+        #        return urls
     return urls
