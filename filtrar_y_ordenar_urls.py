@@ -7,7 +7,6 @@ def filtrar_y_ordenar_urls(urls):
         for m in i:
             if m not in distinctUrls:
                 distinctUrls.append(m)
-    print distinctUrls
    
     m = urls.__len__()
     weightedUrls = []
@@ -25,9 +24,10 @@ def filtrar_y_ordenar_urls(urls):
         valueEstimation = valueEstimation / m
         weightedUrls.append((n , valueEstimation))
 
-    weightedUrls.sort()
+    weightedUrls = sorted(weightedUrls,key = lambda k: k[1],reverse=True)
     return weightedUrls
 
+"""
 #aca comienza el programa y ingreso las urls
 urls = []
 #creo un vector en cual tiene dos link por posicion
@@ -43,5 +43,5 @@ print urls
 #llamo a la funcion y le paso las urls
 aux = filtrar_y_ordenar_urls(urls)
 print aux
-
+"""
 

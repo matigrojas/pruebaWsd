@@ -51,16 +51,16 @@ def generar_consulta_intelligo(consultas):
 def get_url(soup):
     urls = []
     contador = 0
-    for a in soup.findAll('a'):
-    html = download(soup.findAll('a')[0]['href'], unicode=True)
-    soupEspaceNet = BeautifulSoup(html)
-    print soupEspaceNet
+    #for a in soup.findAll('a'):
+    #html = download(soup.findAll('a')[0]['href'], unicode=True)
+    #soupEspaceNet = BeautifulSoup(html)
+    #print soupEspaceNet
     #urlDescription = soupEspaceNet.findAll('a',{'class':'publicationLinkClass'})
     #for url in urlDescription:
-            urlEspace = "http://worldwide.espacenet.com/" + str(url['href'])
-            urlEspace = urlEspace.replace("biblio","description")
-            urls.append(urlEspace)
-            contador = contador + 1
-            if (contador > 9 ) :
-                return urls
+    #        urlEspace = "http://worldwide.espacenet.com/" + str(url['href'])
+    #        urlEspace = urlEspace.replace("biblio","description")
+    #        urls.append(urlEspace)
+    #        contador = contador + 1
+    #        if (contador > 9 ) :
+    #            return urls
     return urls
