@@ -4,6 +4,8 @@ from pattern.en import parse,pprint
 from nltk.corpus import wordnet as wn
 from pattern.vector import Document, Model
 
+#mati es un toga sda
+
 """
 definicion_en_wiki(conc): encuentra la definicion correspondiente al termino conc.
 """
@@ -42,11 +44,19 @@ def encontrar_sustantivos_compuestos(rp):
             else:
                 if (i+1!=len(rp)-1):
                     if(rp[i][0] not in unidos):
+<<<<<<< HEAD
+                        cadena.append(rp[i][0])
+                else:    
+                    if(rp[i][0] not in unidos):
+                        cadena.append(rp[i][0])
+                    cadena.append(rp[i+1][0])
+=======
                         cadena.append((rp[i][0],penn_to_wn(rp[i][1])))
                 else:    
                     if(rp[i][0] not in unidos):
                         cadena.append((rp[i][0],penn_to_wn(rp[i][1])))
                     cadena.append((rp[i+1][0],penn_to_wn(rp[i+1][1])))
+>>>>>>> 5d501b412b368a70d687a046c2bc43fd35578e38
         else:
             if(rp[i][0] not in unidos):
                 cadena.append((rp[i][0],penn_to_wn(rp[i][1])))
