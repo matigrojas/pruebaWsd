@@ -37,4 +37,6 @@ if __name__ == '__main__':
     urls_para_filtrar.append(proyecto.urls_excite)
     urls_para_filtrar.append(proyecto.urls_inteligo)
     proyecto.urls_filtradas = filtrar_y_ordenar_urls(urls_para_filtrar)
-    print proyecto.urls_filtradas
+    for i in proyecto.urls_filtradas:
+        print i 
+        print '\n'
