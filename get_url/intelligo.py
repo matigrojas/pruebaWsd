@@ -60,24 +60,24 @@ def get_url(soup):
     driverPat = webdriver.PhantomJS(desired_capabilities=dcap)
     driverPat.set_script_timeout(15)
     driverPat.set_window_size(1280, 1024)
-    #for a in soup.findAll('a'):
-    rec = soup.findAll('a')
-    elemento = rec[1]['href']
-    tituloElemento = rec[1].string #Necesario para seleccionar el adecuado
-    driverPat.get(elemento)
-    pagBusqueda = driverPat.find_element_by_id('pagebody')
-    contenidoBusqueda = pagBusqueda.get_attribute('innerHTML')
-    soupBusq = BeautifulSoup(contenidoBusqueda)
-    urlDescription = soupBusq.findAll('a',{'class':'publicationLinkClass'})
-    for url in urlDescription:
-        titAnalizado = str(url)
-        titAnalizado = titAnalizado.replace('<wbr>','')
-        titAnalizado = titAnalizado.replace('</wbr>','')
-        if(tituloElemento in titAnalizado):
-            urlEspace = "http://worldwide.espacenet.com/" + str(url['href'])
-            urlEspace = urlEspace.replace("biblio","description")
-            urls.append(urlEspace)
-            contador = contador + 1
-            if (contador > 0 ) : #Va 9
-                return urls
+    for a in soup.findAll('a'):
+        #rec = soup.findAll('a')
+        elemento = a['href']
+        tituloElemento = a.string #Necesario para seleccionar el adecuado
+        driverPat.get(elemento)
+        pagBusqueda = driverPat.find_element_by_id('pagebody')
+        contenidoBusqueda = pagBusqueda.get_attribute('innerHTML')
+        soupBusq = BeautifulSoup(contenidoBusqueda)
+        urlDescription = soupBusq.findAll('a',{'class':'publicationLinkClass'})
+        for url in urlDescription:
+            titAnalizado = str(url)
+            titAnalizado = titAnalizado.replace('<wbr>','')
+            titAnalizado = titAnalizado.replace('</wbr>','')
+            if(tituloElemento in titAnalizado):
+                urlEspace = "http://worldwide.espacenet.com/" + str(url['href'])
+                urlEspace = urlEspace.replace("biblio","description")
+                urls.append(urlEspace)
+                contador = contador + 1
+                if (contador > 9 ) : #Va 9
+                    return urls
     return urls
