@@ -1,6 +1,7 @@
 #-*- coding: utf-8 -*-
 from get_url.controladora import *
 from filtrar_y_ordenar_urls import *
+from webminer.webminer.webminer_main import * 
 
 class proyecto:
     def __init__(self,id_proy, titulo_proy, consultas, directorio):
@@ -37,6 +38,5 @@ if __name__ == '__main__':
     urls_para_filtrar.append(proyecto.urls_excite)
     urls_para_filtrar.append(proyecto.urls_inteligo)
     proyecto.urls_filtradas = filtrar_y_ordenar_urls(urls_para_filtrar)
-    for i in proyecto.urls_filtradas:
-        print i 
-        print '\n'
+    #Llama al webminer
+    webminer_main(proyecto)
