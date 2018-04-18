@@ -1,7 +1,7 @@
 #-*- coding: utf-8 -*-
 from get_url.controladora import *
 from filtrar_y_ordenar_urls import *
-from webminer.webminer.webminer_main import * 
+from webminer.webminer import webminer_main
 
 class proyecto:
     def __init__(self,id_proy, titulo_proy, consultas, directorio):

@@ -1,3 +1,5 @@
+from pattern.web import URL
+import re
 
 def filtrar_y_ordenar_urls(urls):
     
@@ -6,7 +8,8 @@ def filtrar_y_ordenar_urls(urls):
     for i in urls:
         for m in i:
             if m not in distinctUrls:
-                distinctUrls.append(m)
+                if not detect(m):
+                    distinctUrls.append(m)
    
     m = urls.__len__()
     weightedUrls = []
@@ -27,21 +30,13 @@ def filtrar_y_ordenar_urls(urls):
     weightedUrls = sorted(weightedUrls,key = lambda k: k[1],reverse=True)
     return weightedUrls
 
-"""
-#aca comienza el programa y ingreso las urls
-urls = []
-#creo un vector en cual tiene dos link por posicion
-for n in range(0, 3):
-    aa = []
-    for m in range(0 , 2):
-        link = raw_input("ingrese el link ") 
-        if link != None: 
-            aa.append(link)
-    urls.append(aa)     
-print urls
-
-#llamo a la funcion y le paso las urls
-aux = filtrar_y_ordenar_urls(urls)
-print aux
-"""
-
+#filtra las Urls de facebook, amazon.. etc..
+def detect(link):
+    badLinks='youtube|linkedin|amazon|books.google|facebook|twitter|instagram|plus.google|yahoo|ebay|ebayinc|flickr|t.co|.google.|youtu.be|microsoft|microsoftstore'
+    url=URL(link)
+    #print url.domain
+    if re.search(badLinks,url.domain)!=None:
+        bad=True
+    else:
+        bad=False
+    return bad
