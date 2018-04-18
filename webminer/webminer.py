@@ -1,6 +1,6 @@
 #-*- coding: utf-8 -*-
 
-from webMinerontroller import WebMinerController
+from webMinerController import WebMinerController
 
 def webminer_main(proyecto):
     consulta = '' #Consulta final
