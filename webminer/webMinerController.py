@@ -9,6 +9,7 @@ from pattern.web import URL
 #from draw.twoDimensionalDrawing import *
 #from algorithms.retrievalAlgorithms import *
 from algorithmTools import QueryProcessor
+from controller import *
 
 class Structure:#es un clase auxiliar para encapsular una estructura.
 
@@ -32,8 +33,8 @@ class WebMinerController(object):
         self.n=0
         self.directorio = directorio
         self.cloudSize=cloudSize
+        self.crawlerController=CrawlerController(directorio,id_request)
         '''self.engineSearchController=EngineSearchController(self.progress)
-        self.crawlerController=CrawlerController(self.progress,directorio,id_request)
         self.MEGA_CrawlerController=MEGA_CrawlerController(self.progress)
         self.IRController=InformationRetrievalController(self.progress)
         self.storageController=StorageController(self.progress)
@@ -55,7 +56,7 @@ class WebMinerController(object):
         #     for n in cloud.graph.nodes():
         #         print n
 
-        #self.crawler() #Comienza Crawling
+        self.crawler() #Comienza Crawling
     
     def startClouds(self,urls):
         """
@@ -83,3 +84,5 @@ class WebMinerController(object):
             clouds.append(Structure(graph,url.domain)) #Crea un objeto Structure
         return clouds
 
+    def crawler(self):
+        self.crawlerController.start(self.minePackage)
