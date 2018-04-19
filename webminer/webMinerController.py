@@ -25,7 +25,7 @@ class WebMinerController(object):
 
     #En todo momento trabaja con un unico objeto minePackage
 
-    def __init__(self,cloudSize = 50,searchKey = "" ,id_request = 0, urls = [] , directorio = ""):
+    def __init__(self,cloudSize = 10,searchKey = "" ,id_request = 0, urls = [] , directorio = ""):
         super(WebMinerController, self).__init__()
         #self.progress=Process(id_request)
         self.minePackage=dict()

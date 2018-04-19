@@ -38,14 +38,14 @@ class SimpleCrawler1(Crawler):
     def visit(self, link, source=None):
         linkReferrer=link.referrer
         linkUrl=link.url
-        if '#' in link.url:
-            part=link.url.partition('#')
+        if '#' in link.url: #Toma el enlace principal, no la extension post #
+            part=link.url.partition('#') 
             linkUrl=unicode(part[0])
         if '#' in link.referrer:
             partRef=link.referrer.partition('#')
             linkReferrer=unicode(partRef[0])
         if linkUrl in self.structure.nodes():
-            pass
+            pass #Si ya existe un nodo con esa URL, pasa
         else:
             print str(self.count)," VISITING:", linkUrl, " <----- FROM:", linkReferrer
             self.structure.add_node(linkUrl,
