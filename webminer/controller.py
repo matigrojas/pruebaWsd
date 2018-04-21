@@ -43,7 +43,11 @@ class CrawlerController(Controller):
                     time = 0
                     while len(crawler.visited)<cloudSize:
                         print 'Explorando ...'
-                        crawler.crawl(method=DEPTH)
+                        try:
+                            crawler.crawl(method=DEPTH)
+                        except:
+                            print "ERROR EN CRAWL: se continua con el proceso"
+                            break
                         time+=1
                         if time>cloudSize*10:
                             break
