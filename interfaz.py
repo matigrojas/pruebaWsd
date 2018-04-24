@@ -2,6 +2,7 @@
 from get_url.controladora import *
 from filtrar_y_ordenar_urls import *
 from webminer.webminer import webminer_main
+from bd.consultasBD import *
 
 class proyecto:
     def __init__(self,id_proy, titulo_proy, consultas, directorio):
@@ -17,7 +18,11 @@ class proyecto:
 
 if __name__ == '__main__':
     #Se comienza con la lectura de datos necesarios
-    id_proyecto = raw_input('Ingrese el numero de proyecto: ').lower()
+    if(dame_maximo_id() != None):
+        id_proyecto = dame_maximo_id() + 1
+    else:
+        id_proyecto = 1
+    print ('Numero de proyecto: ' + str(id_proyecto))
     #Titulo del proyecto
     titulo_proyecto = raw_input('Ingrese el Titulo del proyecto: ').lower()
     #Consulta (se van a ingresar las consultas que se deseen hacer a mano!)
@@ -28,7 +33,7 @@ if __name__ == '__main__':
         consulta = raw_input('Ingrese una consulta (Para dejar de cargar presione 0): \n')
     #Armado de directorio
     usuario = raw_input('Ingrese su usuario: ').lower()
-    directorio = usuario+ '/' + '000'+id_proyecto
+    directorio = usuario+ '/' + '000'+ str(id_proyecto)
     #Creacion de proyecto
     proyecto = proyecto(id_proyecto,titulo_proyecto,consultas,directorio)
     dame_urls(proyecto)

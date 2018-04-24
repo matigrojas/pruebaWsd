@@ -4,12 +4,13 @@ from optparse import OptionParser
 import networkx as nx
 from pattern.web import URL
 #from progress import *
-#from controllers import *
+#from controller import *
 #from search.testLinks import TestLinksClass #solo para hacer pruebas sin motor de busqueda
 #from draw.twoDimensionalDrawing import *
 #from algorithms.retrievalAlgorithms import *
 from algorithmTools import QueryProcessor
 from controller import *
+from bd.consultasBD import *
 
 class Structure:#es un clase auxiliar para encapsular una estructura.
 
@@ -33,7 +34,8 @@ class WebMinerController(object):
         self.n=0
         self.directorio = directorio
         self.cloudSize=cloudSize
-        self.crawlerController=CrawlerController(directorio,id_request)
+        #self.crawlerController=CrawlerController(directorio,id_request)
+        self.crawlerController=CrawlerControllerPersistido(directorio,id_request)
         '''self.engineSearchController=EngineSearchController(self.progress)
         self.MEGA_CrawlerController=MEGA_CrawlerController(self.progress)
         self.IRController=InformationRetrievalController(self.progress)
@@ -47,7 +49,7 @@ class WebMinerController(object):
         self.minePackage['searchKey']=self.searchKey
         unProcessor = QueryProcessor()
         self.minePackage['searchKeyStemmer'] = unProcessor.processor(self.minePackage) #Se tokeniza la query (devuelve un diccionario de la manera {palabra: conteo} aplicando previamente el stemmer PORTER)
-
+        self.minePackage['searchKey']=self.searchKey
         self.minePackage['cloudSize']=self.cloudSize #Setea un cludsize de 50
         self.minePackage['clouds']=self.startClouds(self.urls) #Clouds recibe una lista de objetos tipo estructura
         # clouds = self.minePackage['clouds']
@@ -55,7 +57,15 @@ class WebMinerController(object):
         #     print cloud.graph.nodes()
         #     for n in cloud.graph.nodes():
         #         print n
-
+        
+        insertMinepackage(self.id_request,self.minePackage['searchKey'],self.minePackage['cloudSize']) #Persiste un nuevo MinePackage
+        for cloud in self.minePackage['clouds']:
+            insertCloud(self.id_request) #Persiste un cloud
+            idCloud = dameUltimoCloud(self.id_request)[0][0] #Se obtiene el id del cloud recien creado
+            for n in cloud.graph.nodes():
+                insertNodoRaiz(idCloud,cloud.graph.node[n]['select'],cloud.graph.node[n]['weight_VSM'],cloud.graph.node[n]['weight_WA'],cloud.graph.node[n]['weight_OKAPI'],cloud.graph.node[n]['weight_SVM'],cloud.graph.node[n]['weight_CRANK'],cloud.graph.node[n]['totalScore'],cloud.graph.node[n]['link'])
+        
+        self.minePackage = None
         self.crawler() #Comienza Crawling
     
     def startClouds(self,urls):
@@ -85,4 +95,4 @@ class WebMinerController(object):
         return clouds
 
     def crawler(self):
-        self.crawlerController.start(self.minePackage)
+        self.crawlerController.start()

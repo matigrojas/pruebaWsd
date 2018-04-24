@@ -7,6 +7,6 @@ class QueryProcessor:
         pass
     def processor(self,minePackage):
         print '####SEARCH_KEY:',minePackage['searchKey']
-        s = Sentence(parse(minePackage['searchKey']))
-        minePackage['searchKey']=count(words(s), stemmer=PORTER) #Retorna diccionario {palabra: cantidad}
-        return minePackage['searchKey']
+        var = minePackage['searchKey']
+        s = Sentence(parse(var))
+        return count(words(s), stemmer=PORTER) #Retorna diccionario {palabra: cantidad}
