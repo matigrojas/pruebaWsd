@@ -57,7 +57,6 @@ class CrawlerController(Controller):
                     self.IRController.start(minePackage) #Recupera Informacion
                     print "Nivel nro: " + str(step)
             step += 1 #Controla los niveles a expandir, en este caso 10
-        gc.collect
         #FALTA SCRAPPER CONTROLLER
         print "Proceso Finalizado"
 
@@ -83,7 +82,7 @@ class CrawlerControllerPersistido(Controller):
         cloudSize = cloudSize[0][0]
         searchKey = dameSerchKey(self.id_request)
         searchKey = searchKey[0][0]
-        for id_cloud in dameIdCloud(self.id_request):
+        for id_cloud in dameIdCloud(self.id_request): #Obtiene IDS de los clouds que pertenecen al proyecto
             step = 0
             cloud = self.generar_cloud(dameNodo(id_cloud[0]))
             while step<5: #Mas adelante setear get_stop; esto indica la cantidad de niveles
@@ -109,6 +108,7 @@ class CrawlerControllerPersistido(Controller):
                 step += 1
                 print "Nivel nro: " + str(step)
                  #Controla los niveles a expandir, en este caso 10
+            gc.collect
         #FALTA SCRAPPER CONTROLLER
         print "Proceso Finalizado"
 
@@ -118,7 +118,7 @@ class CrawlerControllerPersistido(Controller):
         graph=nx.DiGraph() #Inicializa un grafo dirigido (Apunta a uno nodo en especifico) vacio (permite auto apuntado)
         graph.add_node(nodos[9],
                     select=nodos[2],
-                    ID=nodos[1],
+                    ID=nodos[0],
                     weight_VSM=nodos[3],
                     weight_WA=nodos[4],
                     weight_OKAPI=nodos[5],

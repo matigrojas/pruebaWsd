@@ -3,6 +3,7 @@ import random
 import networkx as nx
 from tools import *
 from pattern.web import Crawler, find_urls, DEPTH, BREADTH,URL, MIMETYPE_PDF, FIFO, LIFO
+from bd.consultasBD import *
 
 class Structure:#es un clase auxiliar para encapsular una estructura.
 
@@ -63,6 +64,11 @@ class SimpleCrawler1(Crawler):
             if linkReferrer!='':
                 self.structure.node[linkReferrer]['select']=False
                 self.structure.add_edge(linkReferrer,linkUrl)
+                #Opcional en crawler comun ATENCION
+                insertNodoHijo(dameMiCloud(self.structure.node[linkReferrer]['ID'])[0][0],self.structure.node[linkUrl]['select'],self.structure.node[linkUrl]['weight_VSM'],self.structure.node[linkUrl]['weight_WA'],self.structure.node[linkUrl]['weight_OKAPI'],self.structure.node[linkUrl]['weight_SVM'],self.structure.node[linkUrl]['weight_CRANK'],self.structure.node[linkUrl]['totalScore'],self.structure.node[linkUrl]['link'],self.structure.node[linkReferrer]['ID'])
+                self.structure.node[linkUrl]['ID'] = dameUltimoNodo()[0][0]
+                print "Padre = " + str(self.structure.node[linkReferrer]['ID']) + "Hijo = " + str(self.structure.node[linkUrl]['ID'])
+                
 
     def fail(self, link):
         url=URL(link.url)
@@ -83,6 +89,10 @@ class SimpleCrawler1(Crawler):
             if link.referrer!='':
                 self.structure.node[link.referrer]['select']=False
                 self.structure.add_edge(link.referrer,link.url)
+                #Opcional en crawler comun ATENCION
+                insertNodoHijo(dameMiCloud(self.structure.node[linkReferrer]['ID'])[0][0],self.structure.node[linkUrl]['select'],self.structure.node[linkUrl]['weight_VSM'],self.structure.node[linkUrl]['weight_WA'],self.structure.node[linkUrl]['weight_OKAPI'],self.structure.node[linkUrl]['weight_SVM'],self.structure.node[linkUrl]['weight_CRANK'],self.structure.node[linkUrl]['totalScore'],self.structure.node[linkUrl]['link'],self.structure.node[linkReferrer]['ID'])
+                self.structure.node[linkUrl]['ID'] = dameUltimoNodo()[0][0]
+                print "Padre = " + str(self.structure.node[linkReferrer]['ID']) + "Hijo = " + str(self.structure.node[linkUrl]['ID'])
             self.count+=1
         else:
             print "failed: ", link.url

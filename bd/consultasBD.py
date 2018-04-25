@@ -71,6 +71,10 @@ def insertNodoHijo(id_cloud, selection, Weight_VSM, Weight_WA, Weight_OKAPI, Wei
     query = "INSERT INTO nodos(id_Cloud, Selection, Weight_VSM, Weight_WA, Weight_OKAPI, Weight_SVM, Weight_CRANK, TotalScore, Link, Nodo_Raiz ) VALUES('"+ str(id_cloud) +"', " + str(selection) + ", '"+ str(Weight_VSM) +"', '"+ str(Weight_WA) +"', '"+ str(Weight_OKAPI) +"', '"+ str(Weight_SVM) +"', '"+ str(Weight_CRANK) +"', '"+ str(TotalScore) +"', '"+ str(Link) +"', '"+ str(Nodo_Raiz) +"');"
     runquery(query)
 
+def dameUltimoNodo ():
+    query = "SELECT max(id_Nodo) FROM nodos"
+    return runquery(query) 
+
 def dameNodo (id_cloud):
     query = "SELECT * FROM nodos WHERE id_cloud = '"+ str(id_cloud) +"';"
     return runquery(query)
@@ -78,3 +82,7 @@ def dameNodo (id_cloud):
 def insertMethodData(contenido, NodosId_Nodos):
     query = "INSERT INTO methodData(contenido, NodosId_Nodos) VALUES('"+ str(contenido) +"', '"+ str(NodosId_Nodos) +"');"
     runquery(query)
+
+def dameMiCloud (id_nodo):
+    query = "SELECT id_Cloud FROM nodos WHERE id_Nodo = '"+ str(id_nodo) +"';"
+    return runquery(query)
