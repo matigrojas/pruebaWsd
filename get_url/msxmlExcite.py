@@ -7,7 +7,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from BeautifulSoup import BeautifulSoup
 
-"""
 def generar_consulta_excite(consultas):
     urls = []
     for consulta in consultas:
@@ -31,8 +30,8 @@ def generar_consulta_excite(consultas):
                 urls.append(url)
             driver.quit()
     return urls
-"""
 
+"""
 def generar_consulta_excite(consultas):
     urls = []
     for consula in consultas:
@@ -69,3 +68,4 @@ def generar_consulta_excite(consultas):
             print "Error consulta " + consulta
             pass
     return urls
+"""

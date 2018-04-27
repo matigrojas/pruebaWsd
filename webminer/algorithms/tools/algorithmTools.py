@@ -54,13 +54,17 @@ class MethodData:
     contenido=None
     contenidoConEtiquetas=None
     
-    def __init__(self , data, url=""):
+    def __init__(self , data, url="", contenidoBd = ""):
         if url != "":
             urlContent = UrlToPlainText()
             self.contenidoConEtiquetas = urlContent.plainTextConverter(url,"mantenerEtiquetas") 
             self.contenido = plaintext(self.contenidoConEtiquetas,keep={})
         else:
-            self.contenido = ""
+            if(contenidoBd!=""):
+                self.contenidoConEtiquetas = contenidoBd
+                self.contenido = plaintext(self.contenidoConEtiquetas,keep={})
+            else:
+                self.contenido = ""
         self.data = count(words(Sentence(parse(self.contenido))), stemmer=PORTER)
 
     def getData(self):

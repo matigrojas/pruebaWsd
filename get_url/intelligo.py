@@ -73,8 +73,8 @@ def get_url(soup):
             titAnalizado = str(url)
             titAnalizado = titAnalizado.replace('<wbr>','')
             titAnalizado = titAnalizado.replace('</wbr>','')
-            if(tituloElemento in titAnalizado):
-                urlEspace = "http://worldwide.espacenet.com/" + str(url['href'])
+            if(str(tituloElemento) in titAnalizado):
+                urlEspace = "http://worldwide.espacenet.com" + str(url['href'])
                 urlEspace = urlEspace.replace("biblio","description")
                 urls.append(urlEspace)
                 contador = contador + 1

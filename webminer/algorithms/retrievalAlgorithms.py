@@ -251,7 +251,8 @@ class CRank(Algorithm):
         #processor.processor(minePackage) #Se tokeniza la query
         rankingColaborativo=self.crank_Scoring()#se instancia el modelo de recuperacion CRANK
         rankingColaborativo.run(minePackage) #se ejecuta el calculo de Okapi score(D,Q) y lo setea en el cloud
-        self.ranking(minePackage) # se realiza el proceso de ranking
+        #self.ranking(minePackage) # se realiza el proceso de ranking
+        self.totalScores(minePackage)
 
 '''#### Support Vector Machine ####################################################'''
 class SupportVectorMachine(Algorithm):

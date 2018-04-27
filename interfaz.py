@@ -17,6 +17,7 @@ class proyecto:
         self.urls_filtradas = list()
 
 if __name__ == '__main__':
+    vaciarBD()
     #Se comienza con la lectura de datos necesarios
     if(dame_maximo_id() != None):
         id_proyecto = dame_maximo_id() + 1

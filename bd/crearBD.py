@@ -44,7 +44,7 @@ print aux
 
 '-------NODOS------'
 print 'CREA TABLA NODOS'
-query = "CREATE TABLE nodos (id_Nodo INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, id_Cloud INT(11), Selection BOOL, Weight_VSM DECIMAL (10 , 5), Weight_WA DECIMAL (10 , 5), Weight_OKAPI DECIMAL (10, 5), Weight_SVM DECIMAL (10, 5), Weight_CRANK DECIMAL (10, 5), TotalScore DECIMAL (10, 5), Link VARCHAR(1000),Nodo_Raiz INT (11),FOREIGN KEY(id_Cloud) REFERENCES cloud(id), FOREIGN KEY(Nodo_Raiz) REFERENCES nodos(id_Nodo) );"
+query = "CREATE TABLE nodos (id_Nodo INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, id_Cloud INT(11), Selection BOOL, Weight_VSM DECIMAL (10 , 5), Weight_WA DECIMAL (10 , 5), Weight_OKAPI DECIMAL (10, 5), Weight_SVM DECIMAL (10, 5), Weight_CRANK DECIMAL (10, 5), TotalScore DECIMAL (10, 5), Link VARCHAR(1000),Nodo_Raiz INT (11),FOREIGN KEY(id_Cloud) REFERENCES cloud(id), FOREIGN KEY(Nodo_Raiz) REFERENCES nodos(id_Nodo) on delete cascade on update casade );"
 aux = runquery(query)
 print aux
 

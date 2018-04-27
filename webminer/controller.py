@@ -4,6 +4,8 @@
 #from webScraper.scraper import *
 from pympler import asizeof 
 from pattern.web import URL
+from pattern.en import parse, Sentence
+from pattern.vector import stem, PORTER, LEMMA, count, words, Vector, distance, Document, Model, TFIDF
 from crawler import *
 from algorithms.retrievalAlgorithms import *
 from algorithms.tools.algorithmTools import MethodData
@@ -47,7 +49,7 @@ class CrawlerController(Controller):
                     time = 0
                     while len(crawler.visited)<cloudSize:
                         print 'Explorando ...'
-                        crawler.crawl(method=DEPTH)
+                        crawler.crawl(method=None)
                         time+=1
                         if time>cloudSize*10:
                             break
@@ -82,10 +84,11 @@ class CrawlerControllerPersistido(Controller):
         cloudSize = cloudSize[0][0]
         searchKey = dameSerchKey(self.id_request)
         searchKey = searchKey[0][0]
-        for id_cloud in dameIdCloud(self.id_request): #Obtiene IDS de los clouds que pertenecen al proyecto
-            step = 0
-            cloud = self.generar_cloud(dameNodo(id_cloud[0]))
-            while step<5: #Mas adelante setear get_stop; esto indica la cantidad de niveles
+        step = 0
+        while step<=5: #Mas adelante setear get_stop; esto indica la cantidad de niveles 
+            for id_cloud in dameIdCloud(self.id_request): #Obtiene IDS de los clouds que pertenecen al proyecto
+                print "Id Cloud: " + str(id_cloud[0])
+                cloud = self.generar_cloud(dameNodo(id_cloud[0]))
                 true_nodes = self.trueNodesSelection(cloud)
                 for n in true_nodes:
                     try:
@@ -94,29 +97,40 @@ class CrawlerControllerPersistido(Controller):
                         crawler.newStructure(cloud.graph)
                         time = 0
                     except:
-                        continue
+                        continue    
                     while len(crawler.visited)<cloudSize:
                         print "Cloudsize = " + str(cloudSize) + "Crawler Visited = " + str (len(crawler.visited))
                         print 'Explorando ...'
-                        crawler.crawl(method=DEPTH)
+                        crawler.crawl(method=None)
                         time+=1
                         if time>cloudSize*10:
                             break
+                    actualizarSelect(cloud.graph.node[n]['ID'],cloud.graph.node[n]['select'])
                     print 
                     print '#####Generando documentos#####'
-                    #self.IRController.start(minePackage) #Recupera Informacion
-                step += 1
-                print "Nivel nro: " + str(step)
-                 #Controla los niveles a expandir, en este caso 10
-            gc.collect
-        #FALTA SCRAPPER CONTROLLER
+                    #Creacion de minePackage
+                    clouds = list()
+                    clouds.append(cloud)
+                    minePackage = dict()
+                    minePackage['clouds'] = clouds
+                    minePackage['searchKey'] = searchKey
+                    minePackage['searchKeyStemmer'] = count(words(Sentence(parse(searchKey))), stemmer=PORTER)
+                    self.IRController.start(minePackage) #Recupera Informacion
+                    #FALTA SCRAPPER CONTROLLER
+                #Se pone none para que no ocupen espacio innecesario, todo ya fue guardado en BD
+                minePackage = None
+                cloud = None
+                gc.collect    
+            step += 1
+            print "Explorando nivel nro: " + str(step)
+            #Controla los niveles a expandir, en este caso 10
         print "Proceso Finalizado"
 
     def generar_cloud(self,nodo):
         nodos = nodo[0]
         url = URL(nodos[9])
         graph=nx.DiGraph() #Inicializa un grafo dirigido (Apunta a uno nodo en especifico) vacio (permite auto apuntado)
-        graph.add_node(nodos[9],
+        graph.add_node(str(nodos[9]),
                     select=nodos[2],
                     ID=nodos[0],
                     weight_VSM=nodos[3],
@@ -144,6 +158,11 @@ class InformationRetrievalController(Controller):
 
         for algorithm in own_methods:
             algorithm.run(minePackage) #Ejecuta algoritmos de la tesis.
+        
+        #Se Persisten los datos del ranking
+        for cloud in minePackage['clouds']:
+            for n in cloud.graph.nodes():
+                actualizarPesoNodo(cloud.graph.node[n]['ID'],cloud.graph.node[n]['weight_VSM'],cloud.graph.node[n]['weight_WA'],cloud.graph.node[n]['weight_OKAPI'],cloud.graph.node[n]['weight_SVM'],cloud.graph.node[n]['weight_CRANK'],cloud.graph.node[n]['totalScore'])
 
     def descargarContenido(self,minePackage):
         """agrega al cloud un objeto denominado methodData, el cual va a tener la URL y el contenido de esa URL"""
@@ -151,6 +170,18 @@ class InformationRetrievalController(Controller):
         for cloud in clouds:
             for n in cloud.graph.nodes():
                 if(cloud.graph.node[n]['methodData']==None):
+                    """md = obtenerMethodData(cloud.graph.node[n]['ID'])[0]
+                    if(md!=None):
+                        unMethodData = MethodData("",cloud.graph.node[n]['link'])
+                        cloud.graph.node[n]['methodData'] = unMethodData
+                    else:"""    
                     unMethodData = MethodData("",cloud.graph.node[n]['link']) #El contenido se añade cuando se crea el objeto
                     cloud.graph.node[n]['methodData'] = unMethodData #Method Data va a tener el contenido de la url pasada
+                    insertMethodData(self.mejorarContenido(unMethodData.contenido),cloud.graph.node[n]['ID']) #Persiste MethodData
 
+    def mejorarContenido (self, cont):
+        miCont = unicode(cont)
+        miCont = miCont.encode('latin-1','ignore')
+        miCont = miCont.replace("\'","\\\'")
+        print miCont
+        return miCont
