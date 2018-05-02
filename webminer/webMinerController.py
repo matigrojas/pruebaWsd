@@ -79,7 +79,7 @@ class WebMinerController(object):
         for n in urls: #Recorre cada url presente en urls (urls es una lista en la que cada url es a su vez una lista)
             url=URL(n[0]) #Crea un objeto pattern.URL, enviando la url contenida en la posicion 0 de n
             graph=nx.DiGraph() #Inicializa un grafo dirigido (Apunta a uno nodo en especifico) vacio (permite auto apuntado)
-            graph.add_node(str(n[0]),
+            graph.add_node(n[0],
                         select=True,
                         ID=0,
                         weight_VSM=0.0,

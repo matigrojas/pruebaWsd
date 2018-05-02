@@ -99,7 +99,7 @@ class CrawlerControllerPersistido(Controller):
                     except:
                         continue    
                     while len(crawler.visited)<cloudSize:
-                        print "Cloudsize = " + str(cloudSize) + "Crawler Visited = " + str (len(crawler.visited))
+                        print "Cloudsize = " + str(cloudSize) + " Crawler Visited = " + str (len(crawler.visited)) + " Nivel =  " + str(step)
                         print 'Explorando ...'
                         crawler.crawl(method=None)
                         time+=1
@@ -127,22 +127,26 @@ class CrawlerControllerPersistido(Controller):
         print "Proceso Finalizado"
 
     def generar_cloud(self,nodo):
-        nodos = nodo[0]
-        url = URL(nodos[9])
+        url = URL(nodo[0][9])
         graph=nx.DiGraph() #Inicializa un grafo dirigido (Apunta a uno nodo en especifico) vacio (permite auto apuntado)
-        graph.add_node(str(nodos[9]),
-                    select=nodos[2],
-                    ID=nodos[0],
-                    weight_VSM=nodos[3],
-                    weight_WA=nodos[4],
-                    weight_OKAPI=nodos[5],
-                    weight_SVM=nodos[6],
-                    weight_CRANK=nodos[7],
-                    totalScore=nodos[8],
-                    link=nodos[9],
-                    methodData=None,
-                    )
+        for nodos in nodo:
+            graph.add_node(nodos[9],
+                        select=nodos[2],
+                        ID=nodos[0],
+                        weight_VSM=nodos[3],
+                        weight_WA=nodos[4],
+                        weight_OKAPI=nodos[5],
+                        weight_SVM=nodos[6],
+                        weight_CRANK=nodos[7],
+                        totalScore=nodos[8],
+                        link=nodos[9],
+                        methodData=None,
+                        )
+            if(nodos[10]!=None):
+                linkReferrer = dame_url_nodo_padre(nodos[10])
+                graph.add_edge(linkReferrer,nodos[9]) #Crea un enlace entre ambos nodos
         return Structure(graph,url.domain)
+        """ES NECESARIO CREAR LOS BORDES EDGES; PARA RELACIONAR NODOS!!!!!!!"""
 
 class InformationRetrievalController(Controller):
 
@@ -170,18 +174,17 @@ class InformationRetrievalController(Controller):
         for cloud in clouds:
             for n in cloud.graph.nodes():
                 if(cloud.graph.node[n]['methodData']==None):
-                    """md = obtenerMethodData(cloud.graph.node[n]['ID'])[0]
-                    if(md!=None):
-                        unMethodData = MethodData("",cloud.graph.node[n]['link'])
+                    md = obtenerMethodData(cloud.graph.node[n]['ID'])
+                    if(len(md)>0):
+                        print "Entró"
+                        unMethodData = MethodData("",contenidoBd=md[0][0])
                         cloud.graph.node[n]['methodData'] = unMethodData
-                    else:"""    
-                    unMethodData = MethodData("",cloud.graph.node[n]['link']) #El contenido se añade cuando se crea el objeto
-                    cloud.graph.node[n]['methodData'] = unMethodData #Method Data va a tener el contenido de la url pasada
-                    insertMethodData(self.mejorarContenido(unMethodData.contenido),cloud.graph.node[n]['ID']) #Persiste MethodData
+                    else:    
+                        unMethodData = MethodData("",cloud.graph.node[n]['link']) #El contenido se añade cuando se crea el objeto
+                        cloud.graph.node[n]['methodData'] = unMethodData #Method Data va a tener el contenido de la url pasada
+                        insertMethodData(self.mejorarContenido(unMethodData.contenido),cloud.graph.node[n]['ID']) #Persiste MethodData
 
     def mejorarContenido (self, cont):
-        miCont = unicode(cont)
-        miCont = miCont.encode('latin-1','ignore')
+        miCont = cont.encode('utf-8',errors='replace')
         miCont = miCont.replace("\'","\\\'")
-        print miCont
         return miCont

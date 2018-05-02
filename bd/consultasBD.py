@@ -17,7 +17,7 @@ def runquery(query=''):
     datos = [DB_HOST, DB_USER, DB_PASS, DB_NAME] 
  
     conn = MySQLdb.connect(*datos) # Conectar a la base de datos 
-    #conn.set_character_set('utf8')
+    conn.set_character_set('utf8')
     cursor = conn.cursor()         # Crear un cursor 
     cursor.execute('SET NAMES utf8;')
     cursor.execute('SET CHARACTER SET utf8;')
@@ -102,11 +102,11 @@ def dameUltimoNodo ():
     return runquery(query) 
 
 def dameNodo (id_cloud):
-    query = "SELECT * FROM nodos WHERE id_cloud = '"+ str(id_cloud) +"';"
+    query = "SELECT * FROM nodos WHERE id_cloud = '"+ str(id_cloud) +"' ORDER BY id_Nodo ASC;"
     return runquery(query)
 
 def insertMethodData(contenido, NodosId_Nodos):
-    query = "INSERT INTO methodData(contenido, NodosId_Nodos) VALUES('"+ contenido +"', '"+ str(NodosId_Nodos) +"');"
+    query = "INSERT INTO methodData(contenido, NodosId_Nodos) VALUES('"+ str(contenido) +"', '"+ str(NodosId_Nodos) +"');"
     runquery(query)
 
 def dameMiCloud (id_nodo):
@@ -117,6 +117,9 @@ def obtenerMethodData(id_nodo):
     query = "SELECT contenido FROM methodData WHERE NodosId_Nodos = '"+ str(id_nodo) +"';"
     return runquery(query)
 
+def dame_url_nodo_padre(id_padre):
+    query = "SELECT Link from nodos where Nodo_Raiz = '"+ str(id_padre) + "';"
 
 if __name__=="__main__":
-    print obtenerMethodData(2)
+    print dameNodo(1387)
+
